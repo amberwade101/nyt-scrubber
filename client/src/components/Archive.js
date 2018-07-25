@@ -1,6 +1,6 @@
 import React from "react";
 
-const Saved = (props) => {
+const Archive = (props) => {
   return(
 
   <div className="card">
@@ -12,7 +12,7 @@ const Saved = (props) => {
         </div>
 
         <div className="col-md-6 text-right">
-          <button onClick={() => props.handleDeleteButton(props._id)}>REMOVE</button>
+          
         </div>
       </div>
     </div>
@@ -20,4 +20,4 @@ const Saved = (props) => {
   );
 }
 
-export default Saved;
+export default Archive;

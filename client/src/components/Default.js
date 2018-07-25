@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Billboard from "./Billboard";
 import Results from "./Results";
-import Saved from "./Saved";
+import Archive from "./Archive";
 import ResultsSaved from "./ResultsSaved";
 import Search from "./Search";
 import ResultsSearched from "./ResultsSearched";
@@ -25,7 +25,7 @@ class Home extends Component {
       <Results
         _id={article._id}
         key={article._id}
-        title={article.headline.main}
+        title={article.headline.title}
         date={article.pub_date}
         url={article.web_url}
         handleSaveButton={this.handleSaveButton}
@@ -35,14 +35,13 @@ class Home extends Component {
   }
 
   renderSaved = () => {
-    return this.state.saved.map(save => (
-      <Saved
-        _id={save._id}
-        key={save._id}
-        title={save.title}
-        date={save.date}
-        url={save.url}
-        handleDeleteButton={this.handleDeleteButton}
+    return this.state.saved.map(archive => (
+      <Archive
+        _id={archive._id}
+        key={archive._id}
+        title={archive.title}
+        date={archive.date}
+        url={archive.url}
         getSavedResults={this.getSavedResults}
       />
     ));
@@ -62,31 +61,27 @@ class Home extends Component {
 
   handleFormSubmit = (event) => {
     event.preventDefault();
-    API.searchNYT(this.state.topicChoice, this.state.beginningYear, this.state.endYr)
+    API.search(this.state.topicChoice, this.state.beginningYear, this.state.endYr)
     .then((res) => {
         this.setState({ articles: res.data.response.docs });
     });
   }
 
   getSavedResults = () => {
-    API.getArticle()
+    API.getArt()
     .then((res) => {
         this.setState({ saved: res.data });
     });
   }
 
   handleSaveButton = (id) => {
-    const findArticleByID = this.state.articles.find((ID) => ID._id === id);
-    const newSave = {title: findArticleByID.headline.main, date: findArticleByID.pub_date, url: findArticleByID.web_url};
-    API.saveArticle(newSave)
+    const findArtID = this.state.articles.find((ID) => ID._id === id);
+    const newSave = {title: findArtID.headline.title, date: findArtID.pub_date, url: findArtID.web_url};
+    API.saveArt(newSave)
     .then(this.getSavedResults());
   }
 
-  handleDeleteButton = (id) => {
-    API.deleteResult(id)
-    .then(this.getSavedResults());
-  }
-
+  
   render() {
     return (
       <div>
